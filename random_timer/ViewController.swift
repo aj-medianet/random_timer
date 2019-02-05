@@ -139,7 +139,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
             self.tick.stopBlinking()
             self.tock.stopBlinking()
             //playSound()
-            AudioServicesPlaySystemSound(SystemSoundID(1023))
+            AudioServicesPlaySystemSound(SystemSoundID(1021))
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         } else {
             self.tick.startBlinking()
@@ -154,9 +154,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         guard let url = Bundle.main.url(forResource: "beep", withExtension: "mp3") else { return }
         
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            /*
+            try AVAudioSession.sharedInstance().setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback), mode: <#AVAudioSession.Mode#>)
             try AVAudioSession.sharedInstance().setActive(true)
-            
+            */
             
             
             /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
@@ -179,7 +180,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
 public extension UIButton {
     func shake() {
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         animation.duration = 0.6
         animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
         layer.add(animation, forKey: "shake")
@@ -190,14 +191,14 @@ public extension UILabel {
     
     //Tells the label to start blinking
     public func startBlinking() {
-        let options : UIViewAnimationOptions = .repeat
+        let options : UIView.AnimationOptions = .repeat
         UIView.animate(withDuration: 1, delay:0.0, options:options, animations: {
             self.alpha = 1
         }, completion: nil)
     }
     
     public func startBlinkingTwo() {
-        let options : UIViewAnimationOptions = .repeat
+        let options : UIView.AnimationOptions = .repeat
         UIView.animate(withDuration: 1, delay:0.5, options:options, animations: {
             self.alpha = 1
         }, completion: nil)
@@ -219,4 +220,9 @@ struct Style {
     
     
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }
